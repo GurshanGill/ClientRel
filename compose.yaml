@@ -1,0 +1,29 @@
+services:
+  web:
+    build: .
+    ports: ["127.0.0.1:8000:8000"]
+    environment: &config
+      REDIS_URL: redis://redis:6379
+      MONGO_URL: mongodb://mongo:27017
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+    depends_on: [redis, mongo]
+    restart: on-failure
+  worker:
+    build: .
+    command: ["python", "worker.py"]
+    environment: *config
+    depends_on: [redis, mongo]
+    deploy:
+      replicas: 3
+    restart: on-failure
+  redis:
+    image: redis:7.4
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "always"]
+    volumes: ["streams:/data"]
+  mongo:
+    image: mongo:8.0
+    volumes: ["records:/data/db"]
+volumes:
+  streams:
+  records:

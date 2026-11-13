@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClientRel — CRM workspace</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<aside>
+  <div class="brand"><span class="logo">↗</span>ClientRel</div>
+  <div class="workspace"><span>C</span><div><strong>ClientRel workspace</strong><small>CRM workspace</small></div></div>
+  <p class="nav-label">WORKSPACE</p>
+  <nav aria-label="Workspace">
+    <button data-view="overview" class="active"><i>◫</i> Overview</button>
+    <button data-view="contacts"><i>♙</i> Contacts</button>
+    <button data-view="imports"><i>⇧</i> Imports</button>
+    <button data-view="query"><i>✦</i> AI Query</button>
+  </nav>
+  <footer><span id="mode-dot"></span><span id="mode">Connecting…</span></footer>
+</aside>
+<main>
+<header class="top"><span>Workspace <b>/</b> <strong id="crumb">Overview</strong></span><button class="subtle" data-view="query">✦ &nbsp; Ask AI</button></header>
+<div class="content">
+  <div class="intro" id="overview">
+    <div><p class="eyebrow">CRM WORKSPACE</p><h1>Overview</h1><p class="muted">Track your contacts, deal value, and data imports in one place.</p></div>
+    <button class="primary" data-view="imports">⇧ &nbsp; Import CSV</button>
+  </div>
+  <section id="summary" aria-label="CRM summary">
+    <div class="cards">
+      <article><span class="tile-icon">♙</span><p>Total contacts</p><strong id="count">—</strong></article>
+      <article><span class="tile-icon">＄</span><p>Pipeline value</p><strong id="value">—</strong></article>
+      <article><span class="tile-icon">✓</span><p>Won deals</p><strong id="won">—</strong></article>
+    </div>
+    <article class="pipeline"><div><h2>Deal stages</h2><p class="muted">Contacts by pipeline stage</p></div><div id="stages" class="stages"></div></article>
+  </section>
+  <section id="contacts" class="panel">
+    <div class="panel-head"><div><h2>Contacts</h2><p class="muted">Browse and filter your CRM records.</p></div>
+      <div class="filters"><input id="search" type="search" aria-label="Search contacts" placeholder="Search contacts…"><select id="stage" aria-label="Filter by stage"><option value="">All stages</option><option>New</option><option>Qualified</option><option>Proposal</option><option>Won</option><option>Lost</option></select></div>
+    </div>
+    <div class="scroll"><table><thead><tr><th>Contact</th><th>Company</th><th>Stage</th><th>Deal value</th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div class="pagination"><span id="range">Loading contacts…</span><div><button class="subtle" id="prev" disabled>Previous</button><button class="subtle" id="next" disabled>Next</button></div></div>
+  </section>
+  <section id="imports" class="panel" hidden>
+    <div class="panel-head"><div><h2>Import contacts</h2><p class="muted">Upload a CSV file up to 256 MiB.</p></div><button class="subtle" id="template">Download template</button></div>
+    <form id="import-form"><label for="file">Contact dataset</label><input id="file" type="file" accept=".csv,text/csv" required><button class="primary">Start import</button><p class="muted" id="import-status" role="status"></p></form>
+    <div class="panel-head"><h2>Import history</h2><button class="subtle" id="refresh">Refresh</button></div>
+    <div class="scroll"><table><thead><tr><th>File</th><th>Status</th><th>Chunks</th><th>Accepted</th><th>Rejected</th></tr></thead><tbody id="jobs"></tbody></table></div>
+  </section>
+  <section id="query" class="panel" hidden>
+    <div class="panel-head"><div><h2>✦ AI Query</h2><p class="muted">Ask about your contacts and inspect the validated MongoDB pipeline.</p></div></div>
+    <form id="query-form"><label for="question">Your question</label><textarea id="question" maxlength="1000" rows="4" required placeholder="What is the total deal value by region?"></textarea>
+      <div class="examples"><button type="button" class="subtle">Count contacts by stage</button><button type="button" class="subtle">Show the top 5 deals by value</button></div>
+      <button class="primary">Run query ↗</button><p id="query-status" class="muted" role="status"></p>
+    </form>
+    <div class="results" id="query-result" hidden><h3>Results</h3><div class="scroll" id="result-table"></div><details open><summary>MongoDB pipeline</summary><pre id="pipeline-json"></pre></details></div>
+  </section>
+  <p class="muted" id="overview-error" role="status"></p>
+</div>
+</main>
+<script src="/app.js" defer></script>
+</body>
+</html>
